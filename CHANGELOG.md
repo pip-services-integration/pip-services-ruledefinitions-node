@@ -1,6 +1,6 @@
 # RuleDefinitions Microservice ChangeLog
 
-## <a name="1.0.0"></a> 1.0.0 (2018-04-07)
+## <a name="1.0.0"></a> 1.0.0 (2020-09-03)
 
 Initial public release
 

@@ -48,11 +48,12 @@ Represents an rule
 **Properties:**
 - id: string - unique rule id
 - name: string - rule name
+- group: string - group name
 - description: string - rule description
-- product: string - product name
-- copyrights: string - copyrights
-- min_ver: number - minimum version
-- max_ver: number - maximum version
+- priority: number - rule priority (RulePriorityV1)
+- params: any - additional rule parameters
+- condition: string - rule condition
+- action: string - rule action
 
 ### <a name="class2"></a> DataPage<RuleV1> class
 
@@ -71,9 +72,17 @@ Retrieves a collection of rules according to specified criteria
 **Arguments:** 
 - correlation_id: string - (optional) unique id that identifies distributed transaction
 - filter: object - filter parameters
-  - tags: [string] - (optional) list tags with topic names
-  - status: string - (optional) rule editing status
-  - author: string - (optional) author name in any language 
+  - ids: string - (optional) a comma-separated list of rule ids 
+  - id: string - (optional) unique id of rule
+  - name: string - (optional) rule name
+  - group: string - (optional) rule group
+  - description: string - (optional) rule description
+  - priority: number - (optional) rule priority
+  - min_priority: number - (optional) minimum rule priority
+  - max_priority: number - (optional) maximum rule priority
+  - condition: string - (optional) rule condition
+  - action: string - (optional) rule action
+  - search: string - (optional) search for rules fields: id, name, group, description, condition, action 
 - paging: object - paging parameters
   - skip: int - (optional) start of page (default: 0). Operation returns paged result
   - take: int - (optional) page length (max: 100). Operation returns paged result
@@ -82,7 +91,7 @@ Retrieves a collection of rules according to specified criteria
 - err: Error - occured error or null for success
 - result: DataPage<RuleV1> - retrieved rules in page format
 
-### <a name="operation2"></a> Cmd: 'get\_rule\_by\_id'
+### <a name="operation2"></a> Cmd: 'get_rule_by_id'
 
 Retrieves a single rule specified by its unique id
 
@@ -119,7 +128,7 @@ Updates rule specified by its unique id
 - err: Error - occured error or null for success
 - result: RuleV1 - updated rule object 
  
-### <a name="operation5"></a> Cmd: 'delete\_rule\_by_id'
+### <a name="operation5"></a> Cmd: 'delete_rule_by_id'
 
 Deletes rule specified by its unique id
 

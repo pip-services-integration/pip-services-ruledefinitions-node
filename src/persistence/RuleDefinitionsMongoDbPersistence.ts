@@ -1,54 +1,88 @@
-// let _ = require('lodash');
+let _ = require('lodash');
 
-// import { FilterParams } from 'pip-services3-commons-node';
-// import { PagingParams } from 'pip-services3-commons-node';
-// import { DataPage } from 'pip-services3-commons-node';
-// import { IdentifiableMongoDbPersistence } from 'pip-services3-mongodb-node';
+import { FilterParams } from 'pip-services3-commons-node';
+import { PagingParams } from 'pip-services3-commons-node';
+import { DataPage } from 'pip-services3-commons-node';
+import { IdentifiableMongoDbPersistence } from 'pip-services3-mongodb-node';
 
-// import { RuleV1 } from '../data/version1/RuleV1';
-// import { IRuleDefinitionsPersistence } from './IRuleDefinitionsPersistence';
+import { RuleV1 } from '../data/version1/RuleV1';
+import { IRuleDefinitionsPersistence } from './IRuleDefinitionsPersistence';
 
-// export class RuleDefinitionsMongoDbPersistence
-//     extends IdentifiableMongoDbPersistence<RuleV1, string>
-//     implements IRuleDefinitionsPersistence {
+export class RuleDefinitionsMongoDbPersistence
+    extends IdentifiableMongoDbPersistence<RuleV1, string>
+    implements IRuleDefinitionsPersistence {
 
-//     constructor() {
-//         super('rules');
-//     }
+    constructor() {
+        super('rule_definitions');
+    }
     
-//     private composeFilter(filter: any) {
-//         filter = filter || new FilterParams();
+    private composeFilter(filter: any) {
+        filter = filter || new FilterParams();
 
-//         let criteria = [];
+        let criteria = [];
 
-//         let search = filter.getAsNullableString('search');
-//         if (search != null) {
-//             let searchRegex = new RegExp(search, "i");
-//             let searchCriteria = [];
-//             searchCriteria.push({ id: { $regex: searchRegex } });
-//             searchCriteria.push({ product: { $regex: searchRegex } });
-//             searchCriteria.push({ copyrights: { $regex: searchRegex } });
-//             criteria.push({ $or: searchCriteria });
-//         }
+        let search = filter.getAsNullableString('search');
+        if (search != null) {
+            let searchRegex = new RegExp(search, "i");
+            let searchCriteria = [];
+            searchCriteria.push({ id: { $regex: searchRegex } });
+            searchCriteria.push({ name: { $regex: searchRegex } });
+            searchCriteria.push({ group: { $regex: searchRegex } });
+            searchCriteria.push({ description: { $regex: searchRegex } });
+            searchCriteria.push({ condition: { $regex: searchRegex } });
+            searchCriteria.push({ action: { $regex: searchRegex } });
+            criteria.push({ $or: searchCriteria });
+        }
 
-//         let id = filter.getAsNullableString('id');
-//         if (id != null)
-//             criteria.push({ _id: id });
+        // Filter ids
+        let ids = filter.getAsObject('ids');
+        if (_.isString(ids))
+            ids = ids.split(',');
+        if (_.isArray(ids))
+            criteria.push({ _id: { $in: ids } });
 
-//         let product = filter.getAsNullableString('product');
-//         if (product != null)
-//             criteria.push({ product: product });
+        let id = filter.getAsNullableString('id');
+        if (id != null)
+            criteria.push({ _id: id });
 
-//         let group = filter.getAsNullableString('group');
-//         if (group != null)
-//             criteria.push({ group: group });
-                
-//         return criteria.length > 0 ? { $and: criteria } : null;
-//     }
+        let name = filter.getAsNullableString('name');
+        if (name != null)
+            criteria.push({ name: name });
+
+        let group = filter.getAsNullableString('group');
+        if (group != null)
+            criteria.push({ group: group });
+
+        let description = filter.getAsNullableString('description');
+        if (description != null)
+            criteria.push({ description: description });
+
+        let _priority = filter.getAsNullableInteger('priority');
+        if (_priority != null)
+            criteria.push({ priority: _priority });
+
+        let min_priority = filter.getAsNullableInteger('min_priority');
+        if (min_priority != null)
+            criteria.push({ priority: { $lte: min_priority } });        
+
+        let max_priority = filter.getAsNullableInteger('max_priority');
+        if (max_priority != null)
+            criteria.push({ priority: { $gte: max_priority } });        
     
-//     public getPageByFilter(correlationId: string, filter: FilterParams, paging: PagingParams,
-//         callback: (err: any, page: DataPage<RuleV1>) => void): void {
-//         super.getPageByFilter(correlationId, this.composeFilter(filter), paging, null, null, callback);
-//     }
+        let condition = filter.getAsNullableString('condition');
+        if (condition != null)
+            criteria.push({ condition: condition });
 
-// }
+        let action = filter.getAsNullableString('action');
+        if (action != null)
+            criteria.push({ action: action });                                
+
+        return criteria.length > 0 ? { $and: criteria } : null;
+    }
+    
+    public getPageByFilter(correlationId: string, filter: FilterParams, paging: PagingParams,
+        callback: (err: any, page: DataPage<RuleV1>) => void): void {
+        super.getPageByFilter(correlationId, this.composeFilter(filter), paging, null, null, callback);
+    }
+
+}

@@ -34,12 +34,13 @@ please, refer to documentation of the specific protocol.
 ```typescript
 class RuleV1 implements IStringIdentifiable {
     public id: string;
+    public group: string;
     public name: string;
-    public description: string;
-    public product: string;
-    public copyrights: string;
-    public min_ver: number;
-    public max_ver: number;
+    public description?: string;
+    public priority: number;
+    public params: any;
+    public condition: string;
+    public action: string;
 }
 
 interface IRuleDefinitionsV1 {
@@ -64,7 +65,7 @@ interface IRuleDefinitionsV1 {
 
 Right now the only way to get the microservice is to check it out directly from github repository
 ```bash
-git clone git@github.com:pip-services-content/pip-services-ruledefinitions-node.git
+git clone git@github.com:pip-services-integration/pip-services-ruledefinitions-node.git
 ```
 
 Pip.Service team is working to implement packaging and make stable releases available for your 

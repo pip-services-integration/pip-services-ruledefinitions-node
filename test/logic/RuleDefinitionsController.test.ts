@@ -1,59 +1,71 @@
-let _ = require('lodash');
+﻿let _ = require('lodash');
 let async = require('async');
 let assert = require('chai').assert;
 
-import { FilterParams, MultiString } from 'pip-services3-commons-node';
-import { PagingParams } from 'pip-services3-commons-node';
+import { RuleDefinitionsMemoryPersistence } from "../../src/persistence/RuleDefinitionsMemoryPersistence";
+import { ConfigParams, Descriptor, References, FilterParams, PagingParams } from "pip-services3-commons-node";
+import { RuleDefinitionsController } from "../../src/logic/RuleDefinitionsController";
+import { RuleV1, RulePriorityV1 } from "../../src/data/version1";
 
-import { RuleV1 } from '../../src/data/version1/RuleV1';
+suite('RuleDefinitionsController', () => {
+    let _persistence: RuleDefinitionsMemoryPersistence;
+    let _controller: RuleDefinitionsController;
 
-import { IRuleDefinitionsPersistence } from '../../src/persistence/IRuleDefinitionsPersistence';
-import { RulePriorityV1 } from '../../src/data/version1';
+    let RULE1: RuleV1 = {
+        id: '1',
+        name: 'name 1',
+        group: 'Group 1',
+        action: 'copy',
+        condition: 'condition 1',
+        priority: RulePriorityV1.High,
+        description: null,
+        params: { param1: '123' }
+    };
 
-let RULE1: RuleV1 = {
-    id: '1',
-    name: 'name 1',
-    group: 'Group 1',
-    action: 'copy',
-    condition: 'condition 1',
-    priority: RulePriorityV1.High,
-    description: null,
-    params: { param1: '123' }
-};
-let RULE2: RuleV1 = {
-    id: '2',
-    name: 'name 2',
-    group: 'Group 1',
-    action: 'delete',
-    condition: 'condition 2',
-    priority: RulePriorityV1.Low,
-    description: null,
-    params: { param1: '2443' }
-};
-let RULE3: RuleV1 = {
-    id: '3',
-    name: 'name 3',
-    group: 'Group 2',
-    action: 'create',
-    condition: 'condition 1',
-    priority: RulePriorityV1.Medium,
-    description: null,
-    params: { param1: '2345' }
-};
+    let RULE2: RuleV1 = {
+        id: '2',
+        name: 'name 2',
+        group: 'Group 1',
+        action: 'delete',
+        condition: 'condition 2',
+        priority: RulePriorityV1.Low,
+        description: null,
+        params: { param1: '2443' }
+    };
 
-export class RuleDefinitionsPersistenceFixture {
-    private _persistence: IRuleDefinitionsPersistence;
-    
-    constructor(persistence) {
-        assert.isNotNull(persistence);
-        this._persistence = persistence;
-    }
+    let RULE3: RuleV1 = {
+        id: '3',
+        name: 'name 3',
+        group: 'Group 2',
+        action: 'create',
+        condition: 'condition 1',
+        priority: RulePriorityV1.Medium,
+        description: null,
+        params: { param1: '2345' }
+    };
 
-    private testCreateRules(done) {
+    setup((done) => {
+        _persistence = new RuleDefinitionsMemoryPersistence();
+        _controller = new RuleDefinitionsController();
+        _persistence.configure(new ConfigParams());
+        var references = References.fromTuples(
+            new Descriptor("pip-services-ruledefinitions", "persistence", "mock", "default", "1.0"), _persistence
+        );
+        _controller.setReferences(references);
+        _persistence.open(null, done);
+    });
+
+    teardown((done) => {
+        _persistence.close(null, done);
+    });
+
+    test('CRUD Operations', (done) => {
+        let rule1: RuleV1;
+
         async.series([
-        // Create one rule
+            // Create one rule
             (callback) => {
-                this._persistence.create(
+                _controller.createRule(
                     null,
                     RULE1,
                     (err, rule) => {
@@ -64,13 +76,14 @@ export class RuleDefinitionsPersistenceFixture {
                         assert.equal(rule.name, RULE1.name);
                         assert.equal(rule.group, RULE1.group);
 
+                        rule1 = rule;
                         callback();
                     }
                 );
             },
-        // Create another rule
+            // Create another rule
             (callback) => {
-                this._persistence.create(
+                _controller.createRule(
                     null,
                     RULE2,
                     (err, rule) => {
@@ -85,9 +98,9 @@ export class RuleDefinitionsPersistenceFixture {
                     }
                 );
             },
-        // Create yet another rule
+            // Create yet another rule
             (callback) => {
-                this._persistence.create(
+                _controller.createRule(
                     null,
                     RULE3,
                     (err, rule) => {
@@ -101,21 +114,10 @@ export class RuleDefinitionsPersistenceFixture {
                         callback();
                     }
                 );
-            }
-        ], done);
-    }
-                
-    testCrudOperations(done) {
-        let rule1: RuleV1;
-
-        async.series([
-        // Create items
-            (callback) => {
-                this.testCreateRules(callback);
             },
-        // Get all rules
+            // Get all rules
             (callback) => {
-                this._persistence.getPageByFilter(
+                _controller.getRules(
                     null,
                     new FilterParams(),
                     new PagingParams(),
@@ -131,11 +133,11 @@ export class RuleDefinitionsPersistenceFixture {
                     }
                 );
             },
-        // Update the rule
+            // Update the rule
             (callback) => {
                 rule1.name = 'Updated Name 1';
 
-                this._persistence.update(
+                _controller.updateRule(
                     null,
                     rule1,
                     (err, rule) => {
@@ -149,9 +151,9 @@ export class RuleDefinitionsPersistenceFixture {
                     }
                 );
             },
-        // Delete rule
+            // Delete rule
             (callback) => {
-                this._persistence.deleteById(
+                _controller.deleteRuleById(
                     null,
                     rule1.id,
                     (err) => {
@@ -161,9 +163,9 @@ export class RuleDefinitionsPersistenceFixture {
                     }
                 );
             },
-        // Try to get delete rule
+            // Try to get delete rule
             (callback) => {
-                this._persistence.getOneById(
+                _controller.getRuleById(
                     null,
                     rule1.id,
                     (err, rule) => {
@@ -176,17 +178,65 @@ export class RuleDefinitionsPersistenceFixture {
                 );
             }
         ], done);
-    }
+    });
 
-    testGetWithFilter(done) {
+    test('Get with Filters', (done) => {
+
         async.series([
-        // Create rules
+            // Create one rule
             (callback) => {
-                this.testCreateRules(callback);
+                _controller.createRule(
+                    null,
+                    RULE1,
+                    (err, rule) => {
+                        assert.isNull(err);
+
+                        assert.isObject(rule);
+                        assert.equal(rule.id, RULE1.id);
+                        assert.equal(rule.name, RULE1.name);
+                        assert.equal(rule.group, RULE1.group);
+
+                        callback();
+                    }
+                );
             },
-        // Get rules filtered by group
+            // Create another rule
             (callback) => {
-                this._persistence.getPageByFilter(
+                _controller.createRule(
+                    null,
+                    RULE2,
+                    (err, rule) => {
+                        assert.isNull(err);
+
+                        assert.isObject(rule);
+                        assert.equal(rule.id, RULE2.id);
+                        assert.equal(rule.name, RULE2.name);
+                        assert.equal(rule.group, RULE2.group);
+
+                        callback();
+                    }
+                );
+            },
+            // Create yet another rule
+            (callback) => {
+                _controller.createRule(
+                    null,
+                    RULE3,
+                    (err, rule) => {
+                        assert.isNull(err);
+
+                        assert.isObject(rule);
+                        assert.equal(rule.id, RULE3.id);
+                        assert.equal(rule.name, RULE3.name);
+                        assert.equal(rule.group, RULE3.group);
+
+                        callback();
+                    }
+                );
+            },
+            // Get rules filtered by group
+            (callback) => {
+                _controller.getRules(
                     null,
                     FilterParams.fromValue({
                         group: 'Group 1'
@@ -202,9 +252,9 @@ export class RuleDefinitionsPersistenceFixture {
                     }
                 );
             },
-        // Get rules filtered by search
+            // Get rules filtered by search
             (callback) => {
-                this._persistence.getPageByFilter(
+                _controller.getRules(
                     null,
                     FilterParams.fromValue({
                         search: '2'
@@ -220,9 +270,9 @@ export class RuleDefinitionsPersistenceFixture {
                     }
                 );
             },
-        // Get rules filtered by priority
+            // Get rules filtered by priority
             (callback) => {
-                this._persistence.getPageByFilter(
+                _controller.getRules(
                     null,
                     FilterParams.fromValue({
                         priority: RulePriorityV1.Medium
@@ -240,7 +290,7 @@ export class RuleDefinitionsPersistenceFixture {
             },
             // Get rules filtered by priority range
             (callback) => {
-                this._persistence.getPageByFilter(
+                _controller.getRules(
                     null,
                     FilterParams.fromValue({
                         min_priority: RulePriorityV1.Medium,
@@ -259,7 +309,7 @@ export class RuleDefinitionsPersistenceFixture {
             },
             // Get rules filtered by action
             (callback) => {
-                this._persistence.getPageByFilter(
+                _controller.getRules(
                     null,
                     FilterParams.fromValue({
                         action: 'delete'
@@ -276,5 +326,6 @@ export class RuleDefinitionsPersistenceFixture {
                 );
             }
         ], done);
-    }
-}
+    });
+
+});

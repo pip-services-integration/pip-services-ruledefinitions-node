@@ -1,2 +1,2 @@
-// export { RuleDefinitionsProcess } from './RuleDefinitionsProcess';
-// export { RuleDefinitionsLambdaFunction } from './RuleDefinitionsLambdaFunction';
+export { RuleDefinitionsProcess } from './RuleDefinitionsProcess';
+export { RuleDefinitionsLambdaFunction } from './RuleDefinitionsLambdaFunction';

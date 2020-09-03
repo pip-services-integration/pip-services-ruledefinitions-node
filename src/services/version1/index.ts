@@ -1,1 +1,1 @@
-// export { RuleDefinitionsHttpServiceV1 } from './RuleDefinitionsHttpServiceV1';
+export { RuleDefinitionsHttpServiceV1 } from './RuleDefinitionsHttpServiceV1';

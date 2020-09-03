@@ -1,24 +1,27 @@
-// import { Factory } from 'pip-services3-components-node';
-// import { Descriptor } from 'pip-services3-commons-node';
-// import { RuleDefinitionsMongoDbPersistence } from '../persistence/RuleDefinitionsMongoDbPersistence';
-// import { RuleDefinitionsFilePersistence } from '../persistence/RuleDefinitionsFilePersistence';
-// import { RuleDefinitionsMemoryPersistence } from '../persistence/RuleDefinitionsMemoryPersistence';
-// import { RuleDefinitionsController } from '../logic/RuleDefinitionsController';
-// import { RuleDefinitionsHttpServiceV1 } from '../services/version1/RuleDefinitionsHttpServiceV1';
-// export class RuleDefinitionsServiceFactory extends Factory {
-// 	public static Descriptor = new Descriptor("pip-services-ruledefinitions", "factory", "default", "default", "1.0");
-// 	public static MemoryPersistenceDescriptor = new Descriptor("pip-services-ruledefinitions", "persistence", "memory", "*", "1.0");
-// 	public static FilePersistenceDescriptor = new Descriptor("pip-services-ruledefinitions", "persistence", "file", "*", "1.0");
-// 	public static MongoDbPersistenceDescriptor = new Descriptor("pip-services-ruledefinitions", "persistence", "mongodb", "*", "1.0");
-// 	public static ControllerDescriptor = new Descriptor("pip-services-ruledefinitions", "controller", "default", "*", "1.0");
-// 	public static HttpServiceDescriptor = new Descriptor("pip-services-ruledefinitions", "service", "http", "*", "1.0");
-// 	constructor() {
-// 		super();
-// 		this.registerAsType(RuleDefinitionsServiceFactory.MemoryPersistenceDescriptor, RuleDefinitionsMemoryPersistence);
-// 		this.registerAsType(RuleDefinitionsServiceFactory.FilePersistenceDescriptor, RuleDefinitionsFilePersistence);
-// 		this.registerAsType(RuleDefinitionsServiceFactory.MongoDbPersistenceDescriptor, RuleDefinitionsMongoDbPersistence);
-// 		this.registerAsType(RuleDefinitionsServiceFactory.ControllerDescriptor, RuleDefinitionsController);
-// 		this.registerAsType(RuleDefinitionsServiceFactory.HttpServiceDescriptor, RuleDefinitionsHttpServiceV1);
-// 	}
-// }
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const pip_services3_components_node_1 = require("pip-services3-components-node");
+const pip_services3_commons_node_1 = require("pip-services3-commons-node");
+const RuleDefinitionsMongoDbPersistence_1 = require("../persistence/RuleDefinitionsMongoDbPersistence");
+const RuleDefinitionsFilePersistence_1 = require("../persistence/RuleDefinitionsFilePersistence");
+const RuleDefinitionsMemoryPersistence_1 = require("../persistence/RuleDefinitionsMemoryPersistence");
+const RuleDefinitionsController_1 = require("../logic/RuleDefinitionsController");
+const RuleDefinitionsHttpServiceV1_1 = require("../services/version1/RuleDefinitionsHttpServiceV1");
+class RuleDefinitionsServiceFactory extends pip_services3_components_node_1.Factory {
+    constructor() {
+        super();
+        this.registerAsType(RuleDefinitionsServiceFactory.MemoryPersistenceDescriptor, RuleDefinitionsMemoryPersistence_1.RuleDefinitionsMemoryPersistence);
+        this.registerAsType(RuleDefinitionsServiceFactory.FilePersistenceDescriptor, RuleDefinitionsFilePersistence_1.RuleDefinitionsFilePersistence);
+        this.registerAsType(RuleDefinitionsServiceFactory.MongoDbPersistenceDescriptor, RuleDefinitionsMongoDbPersistence_1.RuleDefinitionsMongoDbPersistence);
+        this.registerAsType(RuleDefinitionsServiceFactory.ControllerDescriptor, RuleDefinitionsController_1.RuleDefinitionsController);
+        this.registerAsType(RuleDefinitionsServiceFactory.HttpServiceDescriptor, RuleDefinitionsHttpServiceV1_1.RuleDefinitionsHttpServiceV1);
+    }
+}
+exports.RuleDefinitionsServiceFactory = RuleDefinitionsServiceFactory;
+RuleDefinitionsServiceFactory.Descriptor = new pip_services3_commons_node_1.Descriptor("pip-services-ruledefinitions", "factory", "default", "default", "1.0");
+RuleDefinitionsServiceFactory.MemoryPersistenceDescriptor = new pip_services3_commons_node_1.Descriptor("pip-services-ruledefinitions", "persistence", "memory", "*", "1.0");
+RuleDefinitionsServiceFactory.FilePersistenceDescriptor = new pip_services3_commons_node_1.Descriptor("pip-services-ruledefinitions", "persistence", "file", "*", "1.0");
+RuleDefinitionsServiceFactory.MongoDbPersistenceDescriptor = new pip_services3_commons_node_1.Descriptor("pip-services-ruledefinitions", "persistence", "mongodb", "*", "1.0");
+RuleDefinitionsServiceFactory.ControllerDescriptor = new pip_services3_commons_node_1.Descriptor("pip-services-ruledefinitions", "controller", "default", "*", "1.0");
+RuleDefinitionsServiceFactory.HttpServiceDescriptor = new pip_services3_commons_node_1.Descriptor("pip-services-ruledefinitions", "service", "http", "*", "1.0");
 //# sourceMappingURL=RuleDefinitionsServiceFactory.js.map

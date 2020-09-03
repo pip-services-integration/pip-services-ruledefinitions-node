@@ -1,2 +1,2 @@
-// export { IRuleDefinitionsController } from './IRuleDefinitionsController';
-// export { RuleDefinitionsController } from './RuleDefinitionsController';
+export { IRuleDefinitionsController } from './IRuleDefinitionsController';
+export { RuleDefinitionsController } from './RuleDefinitionsController';

@@ -5,11 +5,11 @@ All input and output data is serialized in JSON format. Errors are returned in [
 
 * [RuleV1 class](#class1)
 * [DataPage<RuleV1> class](#class2)
-* [POST /rules/get_rules](#operation1)
-* [POST /rules/get_rule_by_id](#operation2)
-* [POST /rules/create_rule](#operation3)
-* [POST /rules/update_rule](#operation4)
-* [POST /rules/delete_rule_id](#operation5)
+* [POST /rule_definitions/get_rules](#operation1)
+* [POST /rule_definitions/get_rule_by_id](#operation2)
+* [POST /rule_definitions/create_rule](#operation3)
+* [POST /rule_definitions/update_rule](#operation4)
+* [POST /rule_definitions/delete_rule_id](#operation5)
 
 ## Data types
 
@@ -20,11 +20,12 @@ Represents an rule
 **Properties:**
 - id: string - unique rule id
 - name: string - rule name
+- group: string - group name
 - description: string - rule description
-- product: string - product name
-- copyrights: string - copyrights
-- min_ver: number - minimum version
-- max_ver: number - maximum version
+- priority: number - rule priority (RulePriorityV1)
+- params: any - additional rule parameters
+- condition: string - rule condition
+- action: string - rule action
 
 ### <a name="class2"></a> DataPage<RuleV1> class
 
@@ -36,16 +37,24 @@ Represents a paged result with subset of requested rules
 
 ## Operations
 
-### <a name="operation1"></a> Method: 'POST', route '/rules/get_rules'
+### <a name="operation1"></a> Method: 'POST', route '/rule_definitions/get_rules'
 
 Retrieves a collection of rules according to specified criteria
 
 **Request body:** 
 - correlation_id: string - (optional) unique id that identifies distributed transaction
 - filter: Object
-  - tags: string - (optional) a comma-separated list of tags with topic names
-  - status: string - (optional) rule editing status
-  - author: string - (optional) author name in any language 
+  - ids: string - (optional) a comma-separated list of rule ids 
+  - id: string - (optional) unique id of rule
+  - name: string - (optional) rule name
+  - group: string - (optional) rule group
+  - description: string - (optional) rule description
+  - priority: number - (optional) rule priority
+  - min_priority: number - (optional) minimum rule priority
+  - max_priority: number - (optional) maximum rule priority
+  - condition: string - (optional) rule condition
+  - action: string - (optional) rule action
+  - search: string - (optional) search for rules fields: id, name, group, description, condition, action 
 - paging: Object
   - skip: int - (optional) start of page (default: 0). Operation returns paged result
   - take: int - (optional) page length (max: 100). Operation returns paged result
@@ -53,7 +62,7 @@ Retrieves a collection of rules according to specified criteria
 **Response body:**
 Array of RuleDefinition objects, DataPage<RuleV1> object is paging was requested or error
 
-### <a name="operation2"></a> Method: 'POST', route '/rules/get\_rule\_by_id'
+### <a name="operation2"></a> Method: 'POST', route '/rule_definitions/get_rule_by_id'
 
 Retrieves a single rule specified by its unique id
 
@@ -64,7 +73,7 @@ Retrieves a single rule specified by its unique id
 **Response body:**
 RuleDefinition object, null if object wasn't found or error 
 
-### <a name="operation3"></a> Method: 'POST', route '/rules/create_rule'
+### <a name="operation3"></a> Method: 'POST', route '/rule_definitions/create_rule'
 
 Creates a new rule
 
@@ -75,7 +84,7 @@ Creates a new rule
 **Response body:**
 Created RuleDefinition object or error
 
-### <a name="operation4"></a> Method: 'POST', route '/rules/update_rule'
+### <a name="operation4"></a> Method: 'POST', route '/rule_definitions/update_rule'
 
 Updates rule specified by its unique id
 
@@ -86,7 +95,7 @@ Updates rule specified by its unique id
 **Response body:**
 Updated RuleDefinition object or error 
  
-### <a name="operation5"></a> Method: 'POST', route '/rules/delete\_rule\_by_id'
+### <a name="operation5"></a> Method: 'POST', route '/rule_definitions/delete_rule_by_id'
 
 Deletes rule specified by its unique id
 

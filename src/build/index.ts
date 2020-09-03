@@ -1,1 +1,1 @@
-// export { RuleDefinitionsServiceFactory } from './RuleDefinitionsServiceFactory';
+export { RuleDefinitionsServiceFactory } from './RuleDefinitionsServiceFactory';

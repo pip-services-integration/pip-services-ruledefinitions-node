@@ -74,4 +74,4 @@ seneca.use(plugin, config);
 ```
 
 You can use the microservice by calling seneca commands directly as described in [Seneca Protocol](SenecaProtocolV1.md)
-or by using [RuleDefinitionsSenecaClient](https://github.com/pip-services-content/pip-clients-rules-node/doc/NodeClientApiV1.md/#client_seneca)
+or by using [RuleDefinitionsSenecaClient](https://github.com/pip-services-integration/pip-clients-ruledefinitions-node/doc/NodeClientApiV1.md/#client_seneca)

@@ -1,21 +1,18 @@
-// import { ConfigParams } from 'pip-services3-commons-node';
-// import { FilterParams } from 'pip-services3-commons-node';
-// import { PagingParams } from 'pip-services3-commons-node';
-// import { DataPage } from 'pip-services3-commons-node';
-// import { JsonFilePersister } from 'pip-services3-data-node';
-// import { RuleDefinitionsMemoryPersistence } from './RuleDefinitionsMemoryPersistence';
-// import { RuleV1 } from '../data/version1/RuleV1';
-// export class RuleDefinitionsFilePersistence extends RuleDefinitionsMemoryPersistence {
-// 	protected _persister: JsonFilePersister<RuleV1>;
-//     public constructor(path?: string) {
-//         super();
-//         this._persister = new JsonFilePersister<RuleV1>(path);
-//         this._loader = this._persister;
-//         this._saver = this._persister;
-//     }
-//     public configure(config: ConfigParams): void {
-//         super.configure(config);
-//         this._persister.configure(config);
-//     }
-// }
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const pip_services3_data_node_1 = require("pip-services3-data-node");
+const RuleDefinitionsMemoryPersistence_1 = require("./RuleDefinitionsMemoryPersistence");
+class RuleDefinitionsFilePersistence extends RuleDefinitionsMemoryPersistence_1.RuleDefinitionsMemoryPersistence {
+    constructor(path) {
+        super();
+        this._persister = new pip_services3_data_node_1.JsonFilePersister(path);
+        this._loader = this._persister;
+        this._saver = this._persister;
+    }
+    configure(config) {
+        super.configure(config);
+        this._persister.configure(config);
+    }
+}
+exports.RuleDefinitionsFilePersistence = RuleDefinitionsFilePersistence;
 //# sourceMappingURL=RuleDefinitionsFilePersistence.js.map

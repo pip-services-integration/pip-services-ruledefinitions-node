@@ -20,7 +20,7 @@
 {{#if FILE_ENABLED}}
 # File persistence. Use it for testing of for simple standalone deployments
 - descriptor: "pip-services-ruledefinitions:persistence:file:default:1.0"
-  path: {{FILE_PATH}}{{#unless FILE_PATH}}"../data/rules.json"{{/unless}}
+  path: {{FILE_PATH}}{{#unless FILE_PATH}}"../data/rule_definitions.json"{{/unless}}
 {{/if}}
 
 {{#if MONGO_ENABLED}}
