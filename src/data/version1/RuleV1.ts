@@ -11,4 +11,5 @@ export class RuleV1 implements IStringIdentifiable {
     public params: any;
     public condition: string;
     public action: string;
+    public disabled: boolean;
 }

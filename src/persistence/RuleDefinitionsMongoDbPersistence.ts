@@ -77,6 +77,10 @@ export class RuleDefinitionsMongoDbPersistence
         if (action != null)
             criteria.push({ action: action });                                
 
+        let disabled = filter.getAsNullableBoolean('disabled');
+        if (disabled != null)
+            criteria.push({ disabled: disabled });                                
+    
         return criteria.length > 0 ? { $and: criteria } : null;
     }
     

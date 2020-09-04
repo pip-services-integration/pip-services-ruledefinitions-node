@@ -13,6 +13,7 @@ class RuleV1Schema extends pip_services3_commons_node_1.ObjectSchema {
         this.withOptionalProperty('params', pip_services3_commons_node_2.TypeCode.Map);
         this.withRequiredProperty('condition', pip_services3_commons_node_2.TypeCode.String);
         this.withRequiredProperty('action', pip_services3_commons_node_2.TypeCode.String);
+        this.withRequiredProperty('disabled', pip_services3_commons_node_2.TypeCode.Boolean);
     }
 }
 exports.RuleV1Schema = RuleV1Schema;

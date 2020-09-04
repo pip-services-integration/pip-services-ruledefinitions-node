@@ -55,6 +55,9 @@ class RuleDefinitionsMongoDbPersistence extends pip_services3_mongodb_node_1.Ide
         let action = filter.getAsNullableString('action');
         if (action != null)
             criteria.push({ action: action });
+        let disabled = filter.getAsNullableBoolean('disabled');
+        if (disabled != null)
+            criteria.push({ disabled: disabled });
         return criteria.length > 0 ? { $and: criteria } : null;
     }
     getPageByFilter(correlationId, filter, paging, callback) {

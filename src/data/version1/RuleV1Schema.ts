@@ -13,5 +13,6 @@ export class RuleV1Schema extends ObjectSchema {
         this.withOptionalProperty('params', TypeCode.Map);
         this.withRequiredProperty('condition', TypeCode.String);
         this.withRequiredProperty('action', TypeCode.String);
+        this.withRequiredProperty('disabled', TypeCode.Boolean);
     }
 }

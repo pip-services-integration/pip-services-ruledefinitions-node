@@ -8,4 +8,5 @@ export declare class RuleV1 implements IStringIdentifiable {
     params: any;
     condition: string;
     action: string;
+    disabled: boolean;
 }

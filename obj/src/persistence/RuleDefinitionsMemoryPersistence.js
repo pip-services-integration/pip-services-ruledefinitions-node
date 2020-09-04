@@ -42,6 +42,7 @@ class RuleDefinitionsMemoryPersistence extends pip_services3_data_node_1.Identif
         let max_priority = filter.getAsNullableInteger('max_priority');
         let condition = filter.getAsNullableString('condition');
         let action = filter.getAsNullableString('action');
+        let disabled = filter.getAsNullableBoolean('disabled');
         let ids = filter.getAsObject('ids');
         // Process ids filter
         if (_.isString(ids))
@@ -70,6 +71,8 @@ class RuleDefinitionsMemoryPersistence extends pip_services3_data_node_1.Identif
             if (condition && item.condition != condition)
                 return false;
             if (action && item.action != action)
+                return false;
+            if (disabled && item.disabled != disabled)
                 return false;
             return true;
         };

@@ -54,6 +54,7 @@ export class RuleDefinitionsMemoryPersistence
         let max_priority = filter.getAsNullableInteger('max_priority');
         let condition = filter.getAsNullableString('condition');
         let action = filter.getAsNullableString('action');
+        let disabled = filter.getAsNullableBoolean('disabled');
         let ids = filter.getAsObject('ids');
 
         // Process ids filter
@@ -84,6 +85,8 @@ export class RuleDefinitionsMemoryPersistence
             if (condition && item.condition != condition) 
                 return false;
             if (action && item.action != action) 
+                return false;
+            if (disabled && item.disabled != disabled)
                 return false;
             return true; 
         };

@@ -18,7 +18,8 @@ let RULE1: RuleV1 = {
     condition: 'condition 1',
     priority: RulePriorityV1.High,
     description: null,
-    params: { param1: '123' }
+    params: { param1: '123' },
+    disabled: false
 };
 let RULE2: RuleV1 = {
     id: '2',
@@ -28,7 +29,8 @@ let RULE2: RuleV1 = {
     condition: 'condition 2',
     priority: RulePriorityV1.Low,
     description: null,
-    params: { param1: '2443' }
+    params: { param1: '2443' },
+    disabled: false
 };
 let RULE3: RuleV1 = {
     id: '3',
@@ -38,7 +40,8 @@ let RULE3: RuleV1 = {
     condition: 'condition 1',
     priority: RulePriorityV1.Medium,
     description: null,
-    params: { param1: '2345' }
+    params: { param1: '2345' },
+    disabled: true
 };
 
 export class RuleDefinitionsPersistenceFixture {
@@ -263,6 +266,24 @@ export class RuleDefinitionsPersistenceFixture {
                     null,
                     FilterParams.fromValue({
                         action: 'delete'
+                    }),
+                    new PagingParams(),
+                    (err, rules) => {
+                        assert.isNull(err);
+
+                        assert.isObject(rules);
+                        assert.lengthOf(rules.data, 1);
+
+                        callback();
+                    }
+                );
+            },
+            // Get rules filtered by disabled
+            (callback) => {
+                this._persistence.getPageByFilter(
+                    null,
+                    FilterParams.fromValue({
+                        disabled: true
                     }),
                     new PagingParams(),
                     (err, rules) => {

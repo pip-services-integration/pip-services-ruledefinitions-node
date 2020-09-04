@@ -27,7 +27,8 @@ let RULE1: RuleV1 = {
     condition: 'condition 1',
     priority: RulePriorityV1.High,
     description: null,
-    params: { param1: '123' }
+    params: { param1: '123' },
+    disabled: false
 };
 
 let RULE2: RuleV1 = {
@@ -38,7 +39,8 @@ let RULE2: RuleV1 = {
     condition: 'condition 2',
     priority: RulePriorityV1.Low,
     description: null,
-    params: { param1: '2443' }
+    params: { param1: '2443' },
+    disabled: false
 };
 
 let RULE3: RuleV1 = {
@@ -49,7 +51,8 @@ let RULE3: RuleV1 = {
     condition: 'condition 1',
     priority: RulePriorityV1.Medium,
     description: null,
-    params: { param1: '2345' }
+    params: { param1: '2345' },
+    disabled: true
 };
 
 suite('RuleDefinitionsHttpServiceV1', () => {
@@ -355,6 +358,25 @@ suite('RuleDefinitionsHttpServiceV1', () => {
                     {
                         filter: FilterParams.fromValue({
                             action: 'delete'
+                        }),
+                        paging: new PagingParams()
+                    },
+                    (err, req, res, page) => {
+                        assert.isNull(err);
+
+                        assert.isObject(page);
+                        assert.lengthOf(page.data, 1);
+
+                        callback();
+                    }
+                );
+            },
+            // Get rules filtered by disabled
+            (callback) => {
+                rest.post('/v1/rule_definitions/get_rules',
+                    {
+                        filter: FilterParams.fromValue({
+                            disabled: true
                         }),
                         paging: new PagingParams()
                     },
